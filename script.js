@@ -1,0 +1,546 @@
+/* =============================================
+   BIRTHDAY WEB APP – SCRIPT.JS
+   For: Reny Aprillia Safarty • 27 April 2026
+   ============================================= */
+
+'use strict';
+
+// ── Config ──────────────────────────────────────
+const BIRTHDAY = new Date('2026-04-27T00:00:00');
+
+const GALLERY_ITEMS = [
+  { file: 'img/1.JPG',  caption: 'Awal dari segalanya, senyum yang mengubah duniaku ✨' },
+  { file: 'img/2.jpg',  caption: 'Matahari di hari-hariku yang mendung ☀️' },
+  { file: 'img/3.jpg',  caption: 'Tawamu adalah melodi favoritku 🎶' },
+  { file: 'img/4.jpg',  caption: 'Tempatku menemukan ketenangan 🏡' },
+  { file: 'img/5.jpg',  caption: 'Momen kecil yang terasa luar biasa bersamamu 💎' },
+  { file: 'img/6.jpeg', caption: 'Kamu, dan selamanya kamu ❤️' },
+  { file: 'img/7.jpeg', caption: 'Setiap detik bersamamu adalah hadiah terindah 🎁' },
+  { file: 'img/8.jpeg', caption: 'Kebahagiaanku adalah melihatmu bahagia 😊' },
+  { file: 'img/9.jpeg', caption: 'Di sampingmu, semua terasa pas dan aman 🤍' },
+  { file: 'img/10.jpeg', caption: 'Kenangan ini, kusimpan rapi di dalam hati 💛' },
+  { file: 'img/11.jpeg', caption: 'Waktu seakan berhenti ketika kita bersama ⏳' },
+  { file: 'img/12.jpg', caption: 'Bukti nyata bahwa kebahagiaan itu ada 💖' },
+  { file: 'img/13.jpg', caption: 'Hanya kamu yang bisa membuatku setenang ini 🌊' },
+  { file: 'img/14.JPG', caption: 'Tatapanmu selalu bisa meneduhkan hatiku 🍃' },
+  { file: 'img/15.JPG', caption: 'Langkah demi langkah, kita lalui bersama 👣' },
+  { file: 'img/16.jpg', caption: 'Tak ada tempat yang lebih baik selain di sisimu ⛺' },
+  { file: 'img/17.jpg', caption: 'Cerita kita, yang paling suka aku baca berulang kali 📖' },
+  { file: 'img/18.jpg', caption: 'Setiap hari adalah petualangan baru bersamamu 🚀' },
+  { file: 'img/19.jpg', caption: 'Kamu adalah definisi dari rumah yang sebenarnya 🏠' },
+  { file: 'img/20.jpg', caption: 'Genggaman tanganmu membuatku tak pernah merasa sendiri 🤝' },
+  { file: 'img/21.jpg', caption: 'Kita dan sejuta cerita yang belum sempat tertulis 📝' },
+  { file: 'img/22.jpg', caption: 'Senyum yang membuatku jatuh cinta berkali-kali 😍' },
+  { file: 'img/23.jpg', caption: 'Terima kasih telah menjadi versi terbaik darimu 💐' },
+  { file: 'img/24.jpg', caption: 'Aku mencintaimu lebih dari kata-kata yang bisa kuucapkan 💌' },
+  { file: 'img/25.jpg', caption: 'Tumbuh bersama adalah keajaiban terbesar 🌻' },
+  { file: 'img/26.jpg', caption: 'Kamu adalah warna di hidupku yang sebelumnya monokrom 🎨' },
+  { file: 'img/27.jpg', caption: 'Jalan bersamamu adalah jalan yang selalu ingin kutempuh 🛤️' },
+  { file: 'img/28.jpg', caption: 'Tak ada yang lebih manis dari momen-momen ini 🍯' },
+  { file: 'img/29.jpg', caption: 'Kita, hari ini, esok, dan untuk selamanya 🌠' },
+  { file: 'img/30.jpg', caption: 'Cerita cinta kita yang akan selalu abadi 💞' }
+];
+
+const WISH_TEXT = `Reny yang paling aku sayangi,
+
+Di hari yang spesial ini, izinkan aku menyampaikan semua yang selama ini 
+ada di dalam hatiku, lewat kata-kata yang mungkin tak cukup untuk mewakilkan 
+betapa besar rasa syukurku memilikimu.
+
+Selamat ulang tahun, sayangku. Bertambah satu tahun usiamu, 
+semoga semakin bertambah pula kebahagiaan, kesehatan, dan semua yang terbaik 
+dalam hidupmu.
+
+Kamu adalah salah satu hal terindah yang pernah hadir dalam hidupku. 
+Kamu bukan hanya seseorang yang aku cintai — kamu adalah alasan mengapa 
+aku ingin menjadi pribadi yang lebih baik setiap harinya.
+
+Doa tertulusku untukmu:
+Semoga Allah selalu menjaga dan melindungimu, 
+memberikanmu kesehatan yang sempurna, 
+hati yang selalu tenang dan lapang, 
+rezeki yang mengalir tanpa henti, 
+dan keberkahan di setiap langkahmu.
+
+Semoga semua impianmu terwujud, semua usahamu membuahkan hasil, 
+dan semua kebaikan yang kamu tanamkan kembali padamu berlipat ganda.
+
+Terima kasih sudah ada, sudah mau hadir dalam hidupku, 
+dan sudah menjadi cahaya di hari-hari yang paling gelap sekalipun.
+
+Aku akan terus ada untukmu — kemarin, hari ini, dan selama yang Allah izinkan.
+
+Dengan seluruh cinta yang aku punya,
+Imam 💕`;
+
+
+
+const EASTER_TITLE = 'Rahasia Kecil 🤫';
+const EASTER_BODY  = `Tahu tidak? Setiap kali kamu tersenyum, semua hal buruk di dunia ini seolah-olah menghilang sejenak. Kamu punya kekuatan itu — kekuatan untuk membuat dunia terasa lebih indah hanya dengan hadir. Jangan pernah underestimate dirimu sendiri, ya. Aku sangat bangga dengan kamu. 💫`;
+
+// ── State ────────────────────────────────────────
+let musicPlaying   = false;
+let confettiActive = false;
+let easterClickCount = 0;
+
+// ── DOM Refs ─────────────────────────────────────
+const pages = {
+  opening:  document.getElementById('page-opening'),
+  surprise: document.getElementById('page-surprise'),
+  gallery:  document.getElementById('page-gallery'),
+  future:   document.getElementById('page-future'),
+};
+const overlay   = document.getElementById('transition-overlay');
+const audioEl   = document.getElementById('bg-music');
+const audioCtrl = document.getElementById('audio-control');
+const audioIcon = document.getElementById('audio-icon');
+
+// ── Init ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  fillTextContent();
+  initCountdown();
+  initParticles();
+  initFloatingHearts('floating-hearts-1', 8);
+  buildGallery();
+  initAudioControl();
+  initHiddenMessage();
+  initParallax();
+  setupAutoplay();
+});
+
+// ── Fill text ────────────────────────────────────
+function fillTextContent() {
+  document.getElementById('wish-text').textContent  = WISH_TEXT;
+
+  document.getElementById('easter-title').textContent = EASTER_TITLE;
+  document.getElementById('easter-body').textContent  = EASTER_BODY;
+}
+
+// ── Countdown ────────────────────────────────────
+function initCountdown() {
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+  const now  = new Date();
+  const diff = BIRTHDAY - now;
+
+  if (diff <= 0) {
+    document.getElementById('countdown-container').classList.add('hidden');
+    document.getElementById('birthday-reached').classList.remove('hidden');
+    return;
+  }
+
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+
+  document.getElementById('days').textContent    = String(d).padStart(2,'0');
+  document.getElementById('hours').textContent   = String(h).padStart(2,'0');
+  document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+  document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+}
+
+// ── Navigation ───────────────────────────────────
+function showPage(name) {
+  Object.entries(pages).forEach(([key, el]) => {
+    if (key === name) {
+      el.classList.remove('hidden');
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+      el.classList.add('hidden');
+    }
+  });
+}
+
+function doTransition(callback) {
+  overlay.classList.remove('hidden');
+  overlay.classList.add('active');
+  playClickSound();
+  setTimeout(() => {
+    callback();
+    overlay.classList.remove('active');
+    setTimeout(() => overlay.classList.add('hidden'), 50);
+  }, 400);
+}
+
+function goToSurprise() {
+  doTransition(() => {
+    showPage('surprise');
+    initFloatingHearts('floating-hearts-2', 12);
+    triggerSurprise();
+  });
+}
+
+function goToGallery() {
+  doTransition(() => {
+    showPage('gallery');
+    initFloatingHearts('floating-hearts-3', 6);
+  });
+}
+
+function goToFuture() {
+  doTransition(() => {
+    showPage('future');
+    initFloatingHearts('floating-hearts-4', 10);
+    initStarCanvas();
+  });
+}
+
+function goToOpening() {
+  doTransition(() => {
+    showPage('opening');
+    initFloatingHearts('floating-hearts-1', 8);
+  });
+}
+
+// ── Surprise Page ────────────────────────────────
+function triggerSurprise() {
+  const burst = document.getElementById('light-burst');
+  burst.classList.add('burst-active');
+  setTimeout(() => burst.classList.remove('burst-active'), 1000);
+
+  startConfetti();
+  typeWriter(
+    document.getElementById('surprise-title'),
+    'Selamat Ulang Tahun\nReny Aprillia Safarty 🎉❤️',
+    60
+  );
+  document.getElementById('surprise-subtitle').textContent =
+    '"Kamu adalah hadiah terbaik yang pernah aku terima dari semesta."';
+}
+
+function typeWriter(el, text, speed) {
+  el.textContent = '';
+  let i = 0;
+  const tick = () => {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(tick, speed);
+    }
+  };
+  tick();
+}
+
+// ── Confetti ─────────────────────────────────────
+function startConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = Array.from({ length: 140 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    r: Math.random() * 8 + 4,
+    d: Math.random() * 80 + 20,
+    color: ['#ff6eb4','#c77dff','#90e0ef','#ffd6ec','#ffb3d9','#f8a','#fff'][Math.floor(Math.random()*7)],
+    tilt: Math.random() * 10 - 10,
+    tiltAngle: 0,
+    tiltAngleInc: (Math.random() * .07) + .05,
+  }));
+
+  let frame = 0;
+  confettiActive = true;
+
+  function draw() {
+    if (!confettiActive) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.lineWidth = p.r / 2;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt + p.r / 4, p.y);
+      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 4);
+      ctx.stroke();
+    });
+    update();
+    if (frame < 260) requestAnimationFrame(draw);
+    else { ctx.clearRect(0,0,canvas.width,canvas.height); confettiActive = false; }
+    frame++;
+  }
+
+  function update() {
+    particles.forEach(p => {
+      p.tiltAngle += p.tiltAngleInc;
+      p.y += (Math.cos(frame / 20) + 1 + p.r / 2) * 1.5;
+      p.tilt = Math.sin(p.tiltAngle - frame / 3) * 15;
+      if (p.y > canvas.height) { p.x = Math.random() * canvas.width; p.y = -20; }
+    });
+  }
+
+  draw();
+}
+
+// ── Particle Background (Page 1) ─────────────────
+function initParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W = canvas.width  = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+
+  const NUM = 80;
+  const pts = Array.from({ length: NUM }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 2 + .5,
+    dx: (Math.random() - .5) * .4,
+    dy: (Math.random() - .5) * .4,
+    alpha: Math.random() * .6 + .2,
+    color: ['#ff6eb4','#c77dff','#90e0ef'][Math.floor(Math.random()*3)],
+  }));
+
+  window.addEventListener('resize', () => {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  });
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0 || p.x > W) p.dx *= -1;
+      if (p.y < 0 || p.y > H) p.dy *= -1;
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ── Star Canvas (Page 4) ──────────────────────────
+function initStarCanvas() {
+  const canvas = document.getElementById('star-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width  = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+
+  const stars = Array.from({ length: 120 }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    r: Math.random() * 1.5 + .3,
+    alpha: Math.random(),
+    speed: Math.random() * .008 + .002,
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    const t = Date.now() / 1000;
+    stars.forEach(s => {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.globalAlpha = (.4 + .5 * Math.sin(t * s.speed * 60 + s.phase));
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ── Floating Hearts ───────────────────────────────
+function initFloatingHearts(containerId, count) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  const emojis = ['❤️','💕','💗','💖','💝','🌸','✨','💫'];
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement('span');
+    h.className = 'heart';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left     = Math.random() * 100 + 'vw';
+    h.style.fontSize = (Math.random() * 1.2 + .7) + 'rem';
+    h.style.animationDuration  = (Math.random() * 8 + 7) + 's';
+    h.style.animationDelay     = (Math.random() * 6) + 's';
+    container.appendChild(h);
+  }
+}
+
+// ── Gallery ───────────────────────────────────────
+function buildGallery() {
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = '';
+
+  let loaded = 0;
+
+  GALLERY_ITEMS.forEach((item, idx) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gallery-item';
+    wrapper.style.animationDelay = (idx * 0.08) + 's';
+    wrapper.onclick = () => openModal(item.file, item.caption);
+
+    const img = document.createElement('img');
+    img.alt = item.caption;
+    img.loading = 'lazy';
+
+    // Test if image exists
+    img.onload  = () => { loaded++; };
+    img.onerror = () => {
+      wrapper.style.display = 'none';
+      loaded++;
+      if (loaded === GALLERY_ITEMS.length) checkEmptyGallery(grid);
+    };
+    img.src = item.file;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'gallery-caption-overlay';
+    const cap = document.createElement('span');
+    cap.className = 'gallery-caption-text';
+    cap.textContent = item.caption;
+    overlay.appendChild(cap);
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(overlay);
+    grid.appendChild(wrapper);
+  });
+}
+
+function checkEmptyGallery(grid) {
+  const visible = grid.querySelectorAll('.gallery-item:not([style*="none"])');
+  if (visible.length === 0) {
+    grid.innerHTML = `
+      <div class="gallery-placeholder">
+        <div class="glass-card">
+          <p>📂 Belum ada foto tersedia.<br>
+          Letakkan foto di folder <strong>/img/</strong><br>
+          dengan nama <em>img1.jpg, img2.jpg, ...</em></p>
+        </div>
+      </div>`;
+  }
+}
+
+function openModal(src, caption) {
+  const modal = document.getElementById('gallery-modal');
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal-caption').textContent = caption;
+  modal.classList.remove('hidden');
+  playClickSound();
+}
+
+function closeModal(e) {
+  const modal = document.getElementById('gallery-modal');
+  if (!e || e.target === modal || e.currentTarget.classList.contains('modal-close')) {
+    modal.classList.add('hidden');
+  }
+}
+
+// ── Easter Egg ────────────────────────────────────
+function showEasterEgg() {
+  document.getElementById('easter-egg-modal').classList.remove('hidden');
+  playClickSound();
+}
+
+function hideEasterEgg(e) {
+  const modal = document.getElementById('easter-egg-modal');
+  if (!e || e.target === modal || e.currentTarget.classList.contains('modal-close')) {
+    modal.classList.add('hidden');
+  }
+}
+
+// ── Hidden Message (konami-style: 5× hint click) ─
+function initHiddenMessage() {
+  const hint = document.getElementById('easter-hint');
+  const msg  = document.getElementById('hidden-message');
+  if (!hint) return;
+  hint.addEventListener('click', () => {
+    easterClickCount++;
+    if (easterClickCount >= 3) {
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 4000);
+      easterClickCount = 0;
+    }
+  });
+}
+
+// ── Audio ─────────────────────────────────────────
+function initAudioControl() {
+  audioCtrl.addEventListener('click', toggleMusic);
+}
+
+// Autoplay on first user touch/click (browser policy)
+function setupAutoplay() {
+  const tryPlay = () => {
+    if (!musicPlaying) {
+      audioEl.load();
+      audioEl.play().then(() => {
+        musicPlaying = true;
+        audioIcon.textContent = '🎶';
+        audioCtrl.classList.add('playing');
+      }).catch(() => {});
+    }
+  };
+  document.addEventListener('click', tryPlay, { once: true });
+  document.addEventListener('touchstart', tryPlay, { once: true });
+}
+
+function toggleMusic() {
+  if (musicPlaying) {
+    audioEl.pause();
+    audioIcon.textContent = '🎵';
+    audioCtrl.classList.remove('playing');
+    musicPlaying = false;
+  } else {
+    audioEl.play().then(() => {
+      audioIcon.textContent = '🎶';
+      audioCtrl.classList.add('playing');
+      musicPlaying = true;
+    }).catch(() => {
+      audioIcon.textContent = '🔇';
+      setTimeout(() => { audioIcon.textContent = '🎵'; }, 1500);
+    });
+  }
+}
+
+// ── Click Sound (Web Audio API) ───────────────────
+function playClickSound() {
+  try {
+    const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + .15);
+    gain.gain.setValueAtTime(.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + .2);
+  } catch (_) {}
+}
+
+// ── Parallax ──────────────────────────────────────
+function initParallax() {
+  document.addEventListener('mousemove', e => {
+    const xp = (e.clientX / window.innerWidth  - .5) * 12;
+    const yp = (e.clientY / window.innerHeight - .5) * 12;
+    document.querySelectorAll('.parallax-card').forEach((el, i) => {
+      const depth = (i % 3 + 1) * 0.35;
+      el.style.transform = `translate(${xp * depth}px, ${yp * depth}px)`;
+    });
+  });
+}
+
+// ── Keyboard: ESC closes modals ───────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    hideEasterEgg();
+  }
+});
+
+// ── Resize: keep canvases correct ────────────────
+window.addEventListener('resize', () => {
+  const pc = document.getElementById('particle-canvas');
+  if (pc) { pc.width = window.innerWidth; pc.height = window.innerHeight; }
+});
