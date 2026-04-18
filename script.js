@@ -237,7 +237,7 @@ function startConfetti() {
     y: Math.random() * canvas.height - canvas.height,
     r: Math.random() * 8 + 4,
     d: Math.random() * 80 + 20,
-    color: ['#ff6eb4','#c77dff','#90e0ef','#ffd6ec','#ffb3d9','#f8a','#fff'][Math.floor(Math.random()*7)],
+    color: ['#F9DAE6','#FAD0E6','#C1E3F1','#9bc5d8','#ffffff'][Math.floor(Math.random()*5)],
     tilt: Math.random() * 10 - 10,
     tiltAngle: 0,
     tiltAngleInc: (Math.random() * .07) + .05,
