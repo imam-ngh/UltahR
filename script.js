@@ -102,6 +102,7 @@ let currentReasonIndex = 0;
 // ── DOM Refs ─────────────────────────────────────
 const pages = {
   opening: document.getElementById('page-opening'),
+  'fireworks-overlay': document.getElementById('fireworks-overlay'),
   surprise: document.getElementById('page-surprise'),
   gallery: document.getElementById('page-gallery'),
   future: document.getElementById('page-future'),
@@ -187,9 +188,115 @@ function doTransition(callback) {
 
 function goToSurprise() {
   doTransition(() => {
+    showPage('fireworks-overlay');
+    startFireworksSequence();
+  });
+}
+
+// ── Fireworks Sequence ───────────────────────────
+function startFireworksSequence() {
+  const canvas = document.getElementById('fireworks-canvas');
+  const ctx = canvas.getContext('2d');
+  const textEl = document.getElementById('fireworks-text');
+  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+  const colors = ['#ff4d6d', '#ff758f', '#ffb703', '#00f5d4', '#fee440'];
+
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
+      this.size = Math.random() * 3 + 1;
+      this.speedX = Math.random() * 6 - 3;
+      this.speedY = Math.random() * 6 - 3;
+      this.opacity = 1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.opacity -= 0.01;
+    }
+    draw() {
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function createExplosion(x, y) {
+    playClickSound();
+    for (let i = 0; i < 50; i++) {
+      particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+    }
+  }
+
+  function animate() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    particles = particles.filter(p => p.opacity > 0);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    
+    if (document.getElementById('fireworks-overlay').classList.contains('active')) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  animate();
+
+  const steps = [
+    { text: 'HAPPY', delay: 1000 },
+    { text: 'BIRTHDAY', delay: 2500 },
+    { text: 'SAYANGKU!', delay: 4000 }
+  ];
+
+  steps.forEach((step, i) => {
+    setTimeout(() => {
+      textEl.textContent = step.text;
+      textEl.classList.add('show');
+      createExplosion(canvas.width / 2, canvas.height / 2);
+      
+      setTimeout(() => {
+        textEl.classList.remove('show');
+      }, 1200);
+    }, step.delay);
+  });
+
+  // Final transition (Seamless)
+  setTimeout(() => {
+    const fwOverlay = document.getElementById('fireworks-overlay');
+    fwOverlay.style.transition = 'opacity 2s ease';
+    fwOverlay.style.opacity = '0';
+    
+    // Start surprise page stuff while fading out
     showPage('surprise');
-    initFloatingHearts('floating-hearts-2', 12);
-    triggerSurprise();
+    initFloatingHearts('floating-hearts-2', 8);
+    triggerSurprise(); // Fix: restore the text reveal
+    
+    const audio = document.getElementById('bg-music');
+    if (audio && audio.paused) audio.play();
+
+    setTimeout(() => {
+      fwOverlay.classList.remove('active');
+      fwOverlay.classList.add('hidden');
+      fwOverlay.style.opacity = '1'; // Reset for next time
+    }, 2000);
+  }, 6000);
+}
+
+function goToSurpriseDirect() {
+  doTransition(() => {
+    showPage('surprise');
+    initFloatingHearts('floating-hearts-2', 8);
   });
 }
 
@@ -202,14 +309,27 @@ function goToGallery() {
     const gatekeeper = document.getElementById('gallery-gatekeeper');
     const mainContent = document.getElementById('gallery-main-content');
     if (gatekeeper && mainContent) {
+      // Reset inline styles from previous animations
+      gatekeeper.style.opacity = '';
+      gatekeeper.style.transform = '';
+      gatekeeper.style.transition = '';
+      
       gatekeeper.classList.remove('hidden');
       mainContent.classList.add('hidden');
       
       // Reset box and key
-      document.getElementById('vintage-box').classList.remove('open');
+      const box = document.getElementById('vintage-box');
+      box.classList.remove('open');
       const keyWrap = document.getElementById('golden-key-wrap');
-      keyWrap.style.transform = 'translate(0, 0)';
+      keyWrap.style.transform = '';
+      keyWrap.style.opacity = '';
+      keyWrap.style.transition = '';
+      
       document.getElementById('golden-key').style.pointerEvents = 'all';
+      document.getElementById('golden-key').style.transform = '';
+      
+      // Ensure gallery is built once visible
+      buildGallery();
     }
   });
 }
@@ -224,12 +344,28 @@ function goToFuture() {
     const gatekeeper = document.getElementById('pinky-gatekeeper');
     const dreams = document.getElementById('future-dreams-content');
     if (gatekeeper && dreams) {
-      // If already sealed, we could keep it revealed, but user said "go to menu janji"
-      // So let's reset it for the wow effect every time? 
-      // Or just ensure it's hidden if not sealed.
-      // Let's follow the request: "when click future, go to pinky menu".
+      // Reset gatekeeper inline styles
+      gatekeeper.style.opacity = '';
+      gatekeeper.style.transform = '';
+      gatekeeper.style.transition = '';
+      
       gatekeeper.classList.remove('hidden');
       dreams.classList.add('hidden');
+      
+      // Reset button and progress
+      const btn = document.getElementById('pinky-promise-btn');
+      if (btn) {
+        btn.style.pointerEvents = '';
+        btn.style.transform = '';
+        const icon = btn.querySelector('.pinky-icon');
+        if (icon) icon.textContent = '🤙';
+        btn.classList.remove('holding');
+      }
+
+      const ring = document.getElementById('pinky-progress-circle');
+      if (ring) ring.style.strokeDashoffset = '283';
+      const msg = document.getElementById('pinky-message');
+      if (msg) msg.classList.add('hidden');
     }
   });
 }
@@ -454,6 +590,10 @@ function checkEmptyGallery(grid) {
   if (visible.length === 0) {
     grid.innerHTML = `
       <div class="gallery-placeholder">
+        <div class="nav-buttons bottom-nav">
+          <button class="btn-secondary" onclick="goToSurpriseDirect()">← Kembali</button>
+          <button class="btn-primary" onclick="goToOpening()">🏠 Awal</button>
+        </div>
         <div class="glass-card">
           <p>📂 Belum ada foto tersedia.<br>
           Letakkan foto di folder <strong>/img/</strong><br>

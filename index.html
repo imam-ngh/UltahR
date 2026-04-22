@@ -74,6 +74,14 @@
     <div class="floating-hearts-container" id="floating-hearts-1"></div>
   </section>
 
+  <!-- ========== FIREWORKS INTRO OVERLAY ========== -->
+  <section id="fireworks-overlay" class="page hidden">
+    <canvas id="fireworks-canvas"></canvas>
+    <div class="fireworks-text-container">
+      <h1 id="fireworks-text" class="fireworks-text"></h1>
+    </div>
+  </section>
+
   <!-- ========== PAGE 2: SURPRISE ========== -->
   <section id="page-surprise" class="page hidden">
     <canvas id="confetti-canvas"></canvas>
@@ -159,7 +167,7 @@
       </div>
 
       <div class="nav-buttons bottom-nav">
-        <button class="btn-secondary" onclick="goToSurprise()">← Kembali</button>
+        <button class="btn-secondary" onclick="goToSurpriseDirect()">← Kembali</button>
         <button class="btn-secondary" onclick="goToFuture()">Masa Depan 🔮</button>
       </div>
     </div>
@@ -284,6 +292,7 @@
       </div>
 
         <div class="nav-buttons bottom-nav">
+          <button class="btn-secondary" onclick="goToSurpriseDirect()">← Kembali</button>
           <button class="btn-secondary" onclick="goToGallery()">← Galeri</button>
           <button class="btn-primary" onclick="goToOpening()">🏠 Awal</button>
         </div>

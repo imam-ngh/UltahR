@@ -71,6 +71,10 @@ body {
   pointer-events: all;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* ---------- Glass Card ---------- */
 .glass-card {
   background: var(--glass-bg);
@@ -1849,6 +1853,41 @@ canvas {
   padding-bottom: 1rem;
   font-weight: 500;
   color: var(--pink);
+}
+
+/* -- Fireworks Name Reveal -- */
+#fireworks-overlay {
+  background: #000;
+  z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#fireworks-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.fireworks-text-container {
+  position: relative;
+  z-index: 3001;
+  text-align: center;
+}
+.fireworks-text {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px var(--pink);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.fireworks-text.show {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 /* =============================================
