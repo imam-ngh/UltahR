@@ -20,6 +20,9 @@
     </audio>
   </div>
 
+  <!-- ========== PETALS CANVAS (GLOBAL) ========== -->
+  <canvas id="petals-canvas" class="petals-canvas"></canvas>
+
   <!-- ========== PAGE 1: OPENING / COUNTDOWN ========== -->
   <section id="page-opening" class="page active">
     <canvas id="particle-canvas"></canvas>
@@ -80,13 +83,20 @@
         <p class="surprise-subtitle fade-in-delay" id="surprise-subtitle"></p>
       </div>
 
-      <div class="wish-card glass-card fade-in-delay-2">
-        <div class="wish-icon">💌</div>
-        <h3 class="wish-title">Untukmu, dengan sepenuh hati...</h3>
-        <div class="wish-text" id="wish-text"></div>
+      <div class="envelope-wrapper fade-in-delay-2" onclick="openEnvelope()">
+        <div class="envelope" id="envelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-paper">
+            <div class="paper-content" id="wish-text"></div>
+          </div>
+          <div class="envelope-front"></div>
+          <div class="envelope-stamp">💌</div>
+        </div>
+        <p class="envelope-hint blink" id="envelope-hint">Klik untuk membuka surat</p>
       </div>
 
       <div class="nav-buttons">
+        <button class="btn-secondary btn-reasons" onclick="showReasons()">💖 10 Alasan Aku Mencintaimu</button>
         <button class="btn-secondary" onclick="goToGallery()">📸 Lihat Galeri Kenangan</button>
         <button class="btn-secondary" onclick="goToFuture()">🔮 Pesan Istimewa</button>
       </div>
@@ -221,6 +231,24 @@
 
   <!-- ========== TRANSITION OVERLAY ========== -->
   <div id="transition-overlay" class="transition-overlay hidden"></div>
+
+  <!-- ========== REASONS MODAL ========== -->
+  <div id="reasons-modal" class="modal hidden" onclick="closeReasons(event)">
+    <div class="modal-content glass-card reasons-modal-content">
+      <button class="modal-close" onclick="closeReasons()">&times;</button>
+      <h3 class="reasons-title">10 Alasan Aku Mencintaimu</h3>
+      <div class="reasons-carousel-container">
+        <div class="reasons-carousel" id="reasons-carousel">
+          <!-- JS will inject reasons here -->
+        </div>
+      </div>
+      <div class="reasons-nav">
+        <button class="btn-icon" onclick="prevReason()">⬅️</button>
+        <span id="reason-counter" class="reason-counter">1 / 10</span>
+        <button class="btn-icon" onclick="nextReason()">➡️</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ========== HIDDEN MESSAGE (Secret) ========== -->
   <div id="hidden-message" class="hidden-message hidden">

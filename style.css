@@ -868,6 +868,233 @@ canvas {
 #star-canvas { z-index: 0; }
 
 /* =============================================
+   NEW ROMANTIC FEATURES
+   ============================================= */
+/* Petals Canvas */
+.petals-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Envelope */
+.envelope-wrapper {
+  position: relative;
+  width: 320px;
+  height: 200px;
+  margin: 2rem auto;
+  cursor: pointer;
+  perspective: 1000px;
+  z-index: 10;
+}
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f7e6f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3), var(--glow-pink);
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+.envelope-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-bottom: 120px solid #eab8d1;
+  z-index: 3;
+}
+.envelope::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  border-top: 100px solid transparent;
+  border-bottom: 100px solid transparent;
+  border-left: 160px solid #f2cce0;
+  z-index: 2;
+}
+.envelope::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-top: 100px solid transparent;
+  border-bottom: 100px solid transparent;
+  border-right: 160px solid #f2cce0;
+  z-index: 2;
+}
+.envelope-flap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-top: 120px solid #f9dae6;
+  transform-origin: top;
+  z-index: 4;
+  transition: transform 0.6s 0.2s, z-index 0s 0.2s;
+}
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+.envelope-paper {
+  position: absolute;
+  bottom: 10px;
+  left: 5%;
+  width: 90%;
+  height: 180px;
+  background: #fff;
+  border-radius: 4px;
+  z-index: 2;
+  transition: transform 0.8s 0.6s, height 0.8s 0.6s, z-index 0s 0.6s;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+.envelope.open .envelope-paper {
+  transform: translateY(-100px);
+  height: 350px;
+  z-index: 5;
+  overflow-y: auto;
+}
+.envelope-paper::-webkit-scrollbar { width: 4px; }
+.envelope-paper::-webkit-scrollbar-thumb { background: rgba(255,110,180,.4); border-radius: 4px; }
+
+.paper-content {
+  font-family: var(--font-script);
+  font-size: 1.15rem;
+  color: #4a3440;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  opacity: 0;
+  transition: opacity 0.4s 1.4s;
+}
+.envelope.open .paper-content {
+  opacity: 1;
+}
+.envelope-stamp {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  z-index: 5;
+  transition: opacity 0.3s;
+}
+.envelope.open .envelope-stamp {
+  opacity: 0;
+}
+.envelope-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--pink-soft);
+  margin-top: 1.5rem;
+  font-style: italic;
+  transition: opacity 0.3s;
+}
+.envelope.open ~ .envelope-hint {
+  opacity: 0;
+}
+.blink { animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* Reasons Modal Carousel */
+.reasons-modal-content {
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  padding: 2rem;
+}
+.reasons-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--pink);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.reasons-carousel-container {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.reasons-carousel {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+}
+.reason-card {
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+}
+.reason-number {
+  font-family: var(--font-script);
+  font-size: 4rem;
+  color: var(--pink-soft);
+  opacity: 0.3;
+  margin-bottom: -1rem;
+  line-height: 1;
+}
+.reason-text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #fff;
+  font-weight: 500;
+}
+.reasons-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 1rem;
+}
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--pink);
+  transition: transform 0.2s;
+}
+.btn-icon:hover {
+  transform: scale(1.2);
+}
+.reason-counter {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--pink-soft);
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* Enhancing existing buttons */
+.btn-reasons {
+  background: linear-gradient(135deg, rgba(249,218,230,0.2), rgba(193,227,241,0.2));
+  border-color: var(--pink);
+}
+
+/* Mobile Adjustments for envelope */
+@media (max-width: 480px) {
+  .envelope-wrapper { transform: scale(0.85); margin: 0 auto; }
+  .envelope.open .envelope-paper { height: 320px; }
+  .reasons-carousel-container { height: 260px; }
+  .reason-text { font-size: 1rem; }
+}
+
+/* =============================================
    RESPONSIVE
    ============================================= */
 @media (max-width: 480px) {

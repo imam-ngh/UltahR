@@ -78,10 +78,26 @@ Imam 💕`;
 const EASTER_TITLE = 'Rahasia Kecil 🤫';
 const EASTER_BODY  = `Tahu tidak? Setiap kali kamu tersenyum, semua hal buruk di dunia ini seolah-olah menghilang sejenak. Kamu punya kekuatan itu — kekuatan untuk membuat dunia terasa lebih indah hanya dengan hadir. Jangan pernah underestimate dirimu sendiri, ya. Aku sangat bangga dengan kamu. 💫`;
 
+const REASONS = [
+  "Karena kamu selalu tahu cara membuatku tersenyum bahkan di hari yang paling berat.",
+  "Karena cara kamu menatapku membuatku merasa menjadi orang paling beruntung di dunia.",
+  "Karena kesabaranmu menghadapi kekuranganku tidak pernah ada habisnya.",
+  "Karena kamu adalah pendengar terbaik yang selalu peduli dengan ceritaku.",
+  "Karena tawamu adalah melodi paling indah yang pernah kudengar.",
+  "Karena bersamamu, aku merasa menjadi diriku sendiri tanpa perlu berpura-pura.",
+  "Karena tulusnya hatimu membuatku selalu ingin menjadi versi terbaik dari diriku.",
+  "Karena genggaman tanganmu selalu memberiku kekuatan dan rasa aman.",
+  "Karena kamu bukan hanya kekasihku, tapi juga sahabat terbaik dan rumahku.",
+  "Dan yang terpenting... karena kamu adalah kamu. Aku mencintaimu tanpa syarat."
+];
+
 // ── State ────────────────────────────────────────
 let musicPlaying   = false;
 let confettiActive = false;
+let petalsActive   = true;
 let easterClickCount = 0;
+let envelopeOpened = false;
+let currentReasonIndex = 0;
 
 // ── DOM Refs ─────────────────────────────────────
 const pages = {
@@ -100,18 +116,18 @@ document.addEventListener('DOMContentLoaded', () => {
   fillTextContent();
   initCountdown();
   initParticles();
+  initPetals();
   initFloatingHearts('floating-hearts-1', 8);
   buildGallery();
   initAudioControl();
   initHiddenMessage();
   initParallax();
   setupAutoplay();
+  buildReasons();
 });
 
 // ── Fill text ────────────────────────────────────
 function fillTextContent() {
-  document.getElementById('wish-text').textContent  = WISH_TEXT;
-
   document.getElementById('easter-title').textContent = EASTER_TITLE;
   document.getElementById('easter-body').textContent  = EASTER_BODY;
 }
@@ -544,3 +560,123 @@ window.addEventListener('resize', () => {
   const pc = document.getElementById('particle-canvas');
   if (pc) { pc.width = window.innerWidth; pc.height = window.innerHeight; }
 });
+
+// ── Petals Background ────────────────────────────
+function initPetals() {
+  const canvas = document.getElementById('petals-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+
+  const petals = Array.from({ length: 40 }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H - H,
+    w: Math.random() * 15 + 10,
+    h: Math.random() * 10 + 5,
+    rot: Math.random() * Math.PI * 2,
+    speed: Math.random() * 1.5 + 0.5,
+    drift: Math.random() * 2 - 1,
+    spin: (Math.random() - 0.5) * 0.05,
+    color: ['#ffb7b2','#f9dae6','#ffc4d9','#ffa6c9','#ffffff'][Math.floor(Math.random()*5)]
+  }));
+
+  window.addEventListener('resize', () => {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  });
+
+  function draw() {
+    if (!petalsActive) return;
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.beginPath();
+      // Draw a simple petal shape
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(p.w / 2, -p.h, p.w, 0);
+      ctx.quadraticCurveTo(p.w / 2, p.h, 0, 0);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.6;
+      ctx.fill();
+      ctx.restore();
+
+      p.y += p.speed;
+      p.x += p.drift + Math.sin(p.y * 0.01) * 1;
+      p.rot += p.spin;
+
+      if (p.y > H + p.w) {
+        p.y = -p.w;
+        p.x = Math.random() * W;
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ── Envelope ─────────────────────────────────────
+function openEnvelope() {
+  if (envelopeOpened) return;
+  envelopeOpened = true;
+  document.getElementById('envelope').classList.add('open');
+  playClickSound();
+  
+  // Typewriter effect for letter after paper slides out (1.4s delay)
+  setTimeout(() => {
+    typeWriter(document.getElementById('wish-text'), WISH_TEXT, 35);
+  }, 1400);
+}
+
+// ── Reasons Modal ────────────────────────────────
+function buildReasons() {
+  const container = document.getElementById('reasons-carousel');
+  if (!container) return;
+  REASONS.forEach((reason, idx) => {
+    const div = document.createElement('div');
+    div.className = 'reason-card';
+    div.innerHTML = `
+      <div class="reason-number">${idx + 1}</div>
+      <p class="reason-text">${reason}</p>
+    `;
+    container.appendChild(div);
+  });
+  updateReasonsCarousel();
+}
+
+function showReasons() {
+  document.getElementById('reasons-modal').classList.remove('hidden');
+  playClickSound();
+}
+
+function closeReasons(e) {
+  const modal = document.getElementById('reasons-modal');
+  if (!e || e.target === modal || e.currentTarget.classList.contains('modal-close')) {
+    modal.classList.add('hidden');
+  }
+}
+
+function nextReason() {
+  if (currentReasonIndex < REASONS.length - 1) {
+    currentReasonIndex++;
+    updateReasonsCarousel();
+    playClickSound();
+  }
+}
+
+function prevReason() {
+  if (currentReasonIndex > 0) {
+    currentReasonIndex--;
+    updateReasonsCarousel();
+    playClickSound();
+  }
+}
+
+function updateReasonsCarousel() {
+  const carousel = document.getElementById('reasons-carousel');
+  if (!carousel) return;
+  carousel.style.transform = `translateX(-${currentReasonIndex * 100}%)`;
+  document.getElementById('reason-counter').textContent = `${currentReasonIndex + 1} / ${REASONS.length}`;
+}
