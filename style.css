@@ -1424,7 +1424,7 @@ canvas {
 }
 
 /* =============================================
-   NEW FEATURES (CINEMA)
+   NEW FEATURES (CINEMA & EMOTIONAL)
    ============================================= */
 
 /* -- Mini Cinema -- */
@@ -1516,6 +1516,118 @@ canvas {
   transition: opacity 1s;
 }
 .cinema-caption.fade-out { opacity: 0; }
+
+/* -- Pinky Promise -- */
+.pinky-promise-card {
+  margin-bottom: 2rem;
+}
+.pinky-promise-body {
+  align-items: center;
+  padding: 2rem;
+}
+.pinky-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+.pinky-touch-zone {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 105, 180, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.3s;
+}
+.pinky-touch-zone:active {
+  transform: scale(0.95);
+}
+.pinky-icon {
+  font-size: 4rem;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
+}
+.pinky-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 105, 180, 0.4) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pinky-touch-zone.holding .pinky-glow {
+  opacity: 1;
+  animation: pulse-glow 1s infinite alternate;
+}
+@keyframes pulse-glow {
+  from { transform: scale(1); opacity: 0.4; }
+  to { transform: scale(1.2); opacity: 0.7; }
+}
+
+.pinky-progress-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.pinky-progress-ring circle {
+  fill: none;
+  stroke-width: 6;
+}
+.ring-bg {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+.ring-progress {
+  stroke: var(--pink);
+  stroke-linecap: round;
+  stroke-dasharray: 283; /* 2 * PI * 45 */
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.pinky-message {
+  margin-top: 2rem;
+  text-align: center;
+  font-family: var(--font-script);
+  font-size: 1.4rem;
+  color: var(--pink);
+  animation: fadeInUp 0.8s ease forwards;
+  max-width: 300px;
+}
+
+/* -- Wet Ink Writing Effect -- */
+.paper-content.wet-ink {
+  opacity: 1;
+  font-family: 'Dancing Script', cursive;
+  position: relative;
+  overflow: hidden;
+}
+
+.ink-stroke {
+  color: #1a1a1a; /* Darker ink color */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(5px);
+  filter: blur(2px);
+  transition: opacity 0.3s, transform 0.5s, filter 0.8s;
+}
+
+.ink-stroke.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.ink-stroke.fresh {
+  color: #000;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5); /* Shiny wet ink effect */
+}
 
 /* =============================================
    RESPONSIVE

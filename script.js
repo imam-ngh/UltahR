@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   setupAutoplay();
   buildReasons();
+  initPinkyPromise();
 });
 
 // ── Fill text ────────────────────────────────────
@@ -203,6 +204,18 @@ function goToFuture() {
     showPage('future');
     initFloatingHearts('floating-hearts-4', 10);
     initStarCanvas();
+    
+    // Ensure promise section is visible and dreams are hidden
+    const gatekeeper = document.getElementById('pinky-gatekeeper');
+    const dreams = document.getElementById('future-dreams-content');
+    if (gatekeeper && dreams) {
+      // If already sealed, we could keep it revealed, but user said "go to menu janji"
+      // So let's reset it for the wow effect every time? 
+      // Or just ensure it's hidden if not sealed.
+      // Let's follow the request: "when click future, go to pinky menu".
+      gatekeeper.classList.remove('hidden');
+      dreams.classList.add('hidden');
+    }
   });
 }
 
@@ -624,10 +637,42 @@ function openEnvelope() {
   document.getElementById('envelope').classList.add('open');
   playClickSound();
 
-  // Typewriter effect for letter after paper slides out (1.4s delay)
-  setTimeout(() => {
-    typeWriter(document.getElementById('wish-text'), WISH_TEXT, 35);
-  }, 1400);
+  const paper = document.getElementById('wish-text');
+  paper.innerHTML = '';
+  paper.classList.add('wet-ink');
+  
+  const text = WISH_TEXT;
+  const chars = text.split('');
+  
+  let i = 0;
+  function writeChar() {
+    if (i < chars.length) {
+      const span = document.createElement('span');
+      // Replace newline with <br> for display
+      if (chars[i] === '\n') {
+        paper.appendChild(document.createElement('br'));
+      } else {
+        span.textContent = chars[i];
+        span.className = 'ink-stroke';
+        paper.appendChild(span);
+        
+        // Force reflow
+        span.offsetWidth;
+        span.classList.add('visible', 'fresh');
+        
+        setTimeout(() => {
+          span.classList.remove('fresh');
+        }, 1500);
+      }
+      
+      i++;
+      const delay = chars[i-1] === '\n' ? 400 : (Math.random() * 40 + 20);
+      setTimeout(writeChar, delay);
+    }
+  }
+
+  // Start writing after paper slides out (1.4s delay)
+  setTimeout(writeChar, 1400);
 }
 
 // ── Reasons Modal ────────────────────────────────
@@ -750,4 +795,77 @@ function showCinemaSlide() {
     imgEl.src = item.file;
     capEl.textContent = item.caption;
   }
+}
+
+// ── Pinky Promise ────────────────────────────────
+function initPinkyPromise() {
+  const btn = document.getElementById('pinky-promise-btn');
+  const ring = document.getElementById('pinky-progress-circle');
+  const msg = document.getElementById('pinky-message');
+  if (!btn || !ring || !msg) return;
+
+  let holdTimer;
+  let progress = 0;
+  const duration = 2000; // 2 seconds to seal the promise
+  const interval = 20; // 20ms steps
+
+  function startHold(e) {
+    e.preventDefault();
+    btn.classList.add('holding');
+    progress = 0;
+    
+    holdTimer = setInterval(() => {
+      progress += interval;
+      const percent = Math.min(progress / duration, 1);
+      const offset = 283 - (percent * 283);
+      ring.style.strokeDashoffset = offset;
+      
+      if (percent >= 1) {
+        clearInterval(holdTimer);
+        sealPromise();
+      }
+    }, interval);
+  }
+
+  function stopHold() {
+    btn.classList.remove('holding');
+    clearInterval(holdTimer);
+    if (progress < duration) {
+      // Reset progress
+      ring.style.strokeDashoffset = 283;
+    }
+  }
+
+  function sealPromise() {
+    btn.style.pointerEvents = 'none';
+    btn.style.transform = 'scale(1.2)';
+    btn.querySelector('.pinky-icon').textContent = '🤝';
+    msg.classList.remove('hidden');
+    playClickSound();
+    
+    // Reveal future dreams content after 3 seconds
+    setTimeout(() => {
+      const dreams = document.getElementById('future-dreams-content');
+      if (dreams) {
+        dreams.classList.remove('hidden');
+        // Scroll to the revealed content
+        dreams.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 3000);
+
+    // Add some extra confetti or hearts locally
+    if (window.confetti) {
+       confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.8 }
+       });
+    }
+  }
+
+  btn.addEventListener('mousedown', startHold);
+  btn.addEventListener('touchstart', startHold);
+  
+  window.addEventListener('mouseup', stopHold);
+  window.addEventListener('touchend', stopHold);
 }

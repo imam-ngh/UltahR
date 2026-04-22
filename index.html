@@ -144,15 +144,40 @@
 
     <div class="future-content">
 
-      <!-- Intro -->
-      <div class="future-intro-card glass-card">
-        <p class="future-eyebrow">✨ Together, Always ✨</p>
-        <h2 class="future-title">Our Future...</h2>
-        <p class="future-subtitle">Sebuah mimpi yang ingin kita wujudkan bersama, Reny 💕</p>
+      <!-- Pinky Promise Section (Gatekeeper) -->
+      <div class="fcard pinky-promise-card" id="pinky-gatekeeper">
+        <div class="fcard-body glass-card pinky-promise-body">
+          <h3 class="fcard-title text-center">Janji Jari Kelingking</h3>
+          <p class="text-center" style="font-size: 0.9rem; font-style: italic; margin-bottom: 1.5rem;">"Tempel dan tahan jarimu di sini untuk mengikat janji kita..."</p>
+          <div class="pinky-wrapper">
+             <div class="pinky-touch-zone" id="pinky-promise-btn">
+                <div class="pinky-icon">🤙</div>
+                <div class="pinky-glow"></div>
+                <div class="pinky-progress-ring">
+                   <svg viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="45" class="ring-bg" />
+                      <circle cx="50" cy="50" r="45" class="ring-progress" id="pinky-progress-circle" />
+                   </svg>
+                </div>
+             </div>
+          </div>
+          <div id="pinky-message" class="pinky-message hidden">
+             "Janji ya, jangan pernah lepas tanganku apapun yang terjadi. Aku mencintaimu selamanya." ❤️
+          </div>
+        </div>
       </div>
 
-      <!-- Card 1 – Pelaminan -->
-      <div class="fcard parallax-card">
+      <!-- Future Dreams Content (Hidden initially) -->
+      <div id="future-dreams-content" class="hidden">
+        <!-- Intro -->
+        <div class="future-intro-card glass-card">
+          <p class="future-eyebrow">✨ Together, Always ✨</p>
+          <h2 class="future-title">Our Future...</h2>
+          <p class="future-subtitle">Sebuah mimpi yang ingin kita wujudkan bersama, Reny 💕</p>
+        </div>
+
+        <!-- Card 1 – Pelaminan -->
+        <div class="fcard parallax-card">
         <div class="fcard-img-wrap">
           <img src="img/pelaminan.png" alt="Pelaminan Impian" class="fcard-img" />
           <div class="fcard-img-overlay"></div>
@@ -220,10 +245,11 @@
         🌸
       </div>
 
-      <div class="nav-buttons bottom-nav">
-        <button class="btn-secondary" onclick="goToGallery()">← Galeri</button>
-        <button class="btn-primary" onclick="goToOpening()">🏠 Awal</button>
-      </div>
+        <div class="nav-buttons bottom-nav">
+          <button class="btn-secondary" onclick="goToGallery()">← Galeri</button>
+          <button class="btn-primary" onclick="goToOpening()">🏠 Awal</button>
+        </div>
+      </div> <!-- End future-dreams-content -->
     </div>
 
     <div class="floating-hearts-container" id="floating-hearts-4"></div>
