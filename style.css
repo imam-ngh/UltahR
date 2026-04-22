@@ -1876,14 +1876,16 @@ canvas {
 }
 .fireworks-text {
   font-family: var(--font-display);
-  font-size: 5rem;
+  font-size: clamp(1.8rem, 8vw, 5rem);
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: 10px;
+  letter-spacing: clamp(4px, 1.5vw, 10px);
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px var(--pink);
   opacity: 0;
   transform: scale(0.5);
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 90vw;
+  margin: 0 auto;
 }
 .fireworks-text.show {
   opacity: 1;
