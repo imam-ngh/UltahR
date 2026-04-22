@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAutoplay();
   buildReasons();
   initPinkyPromise();
+  initGalleryGatekeeper();
 });
 
 // ── Fill text ────────────────────────────────────
@@ -196,6 +197,20 @@ function goToGallery() {
   doTransition(() => {
     showPage('gallery');
     initFloatingHearts('floating-hearts-3', 6);
+    
+    // Ensure gatekeeper is shown and main content hidden
+    const gatekeeper = document.getElementById('gallery-gatekeeper');
+    const mainContent = document.getElementById('gallery-main-content');
+    if (gatekeeper && mainContent) {
+      gatekeeper.classList.remove('hidden');
+      mainContent.classList.add('hidden');
+      
+      // Reset box and key
+      document.getElementById('vintage-box').classList.remove('open');
+      const keyWrap = document.getElementById('golden-key-wrap');
+      keyWrap.style.transform = 'translate(0, 0)';
+      document.getElementById('golden-key').style.pointerEvents = 'all';
+    }
   });
 }
 
@@ -868,4 +883,124 @@ function initPinkyPromise() {
   
   window.addEventListener('mouseup', stopHold);
   window.addEventListener('touchend', stopHold);
+}
+
+// ── Gallery Gatekeeper ───────────────────────────
+function initGalleryGatekeeper() {
+  const key = document.getElementById('golden-key');
+  const keyWrap = document.getElementById('golden-key-wrap');
+  const box = document.getElementById('vintage-box');
+  const keyhole = document.querySelector('.keyhole');
+  if (!key || !box || !keyhole) return;
+
+  let isDragging = false;
+  let startX, startY;
+  let currentX = 0, currentY = 0;
+
+  function onStart(e) {
+    isDragging = true;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    startX = clientX - currentX;
+    startY = clientY - currentY;
+    playClickSound();
+  }
+
+  function onMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentX = clientX - startX;
+    currentY = clientY - startY;
+    keyWrap.style.transform = `translate(${currentX}px, ${currentY}px)`;
+  }
+
+  function onEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+
+    // Check if key is near keyhole
+    const keyRect = key.getBoundingClientRect();
+    const holeRect = keyhole.getBoundingClientRect();
+    
+    // Distance check (center to center)
+    const keyCenterX = keyRect.left + keyRect.width / 2;
+    const keyCenterY = keyRect.top + keyRect.height / 2;
+    const holeCenterX = holeRect.left + holeRect.width / 2;
+    const holeCenterY = holeRect.top + holeRect.height / 2;
+    
+    const dist = Math.hypot(keyCenterX - holeCenterX, keyCenterY - holeCenterY);
+    
+    if (dist < 60) {
+      unlockBox(holeCenterX, holeCenterY);
+    } else {
+      // Snap back or stay? Let's stay but maybe snap back slightly if too far
+      if (dist > 300) {
+        currentX = 0; currentY = 0;
+        keyWrap.style.transition = 'transform 0.5s';
+        keyWrap.style.transform = 'translate(0, 0)';
+        setTimeout(() => keyWrap.style.transition = '', 500);
+      }
+    }
+  }
+
+  function unlockBox(targetX, targetY) {
+    key.style.pointerEvents = 'none';
+    
+    // Animate key into the hole
+    const keyRect = key.getBoundingClientRect();
+    const wrapRect = keyWrap.getBoundingClientRect();
+    const offsetX = targetX - (keyRect.left + keyRect.width / 2);
+    const offsetY = targetY - (keyRect.top + keyRect.height / 2);
+    
+    currentX += offsetX;
+    currentY += offsetY;
+    
+    keyWrap.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+    keyWrap.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    
+    setTimeout(() => {
+      // Rotate key
+      key.style.transition = 'transform 0.5s';
+      key.style.transform = 'rotate(90deg)';
+      playClickSound();
+      
+      setTimeout(() => {
+        // Open box
+        box.classList.add('open');
+        playClickSound();
+        
+        // Hide key
+        keyWrap.style.opacity = '0';
+        keyWrap.style.transition = 'opacity 0.5s';
+        
+        // Reveal gallery content after box opens
+        setTimeout(() => {
+          const gatekeeper = document.getElementById('gallery-gatekeeper');
+          const mainContent = document.getElementById('gallery-main-content');
+          if (gatekeeper && mainContent) {
+            gatekeeper.style.transition = 'opacity 1s, transform 1s';
+            gatekeeper.style.opacity = '0';
+            gatekeeper.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+              gatekeeper.classList.add('hidden');
+              mainContent.classList.remove('hidden');
+              mainContent.style.animation = 'fadeInUp 1s forwards';
+              buildGallery(); // Rebuild to ensure animations trigger
+            }, 1000);
+          }
+        }, 1500);
+      }, 600);
+    }, 800);
+  }
+
+  key.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+  
+  key.addEventListener('touchstart', onStart, { passive: false });
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('touchend', onEnd);
 }

@@ -111,19 +111,57 @@
 
   <!-- ========== PAGE 3: GALLERY ========== -->
   <section id="page-gallery" class="page hidden">
-    <div class="page-header">
-      <h2 class="page-title">📸 Kenangan Indah Kita</h2>
-      <p class="page-subtitle">2023 – 2026 • Momen yang takkan pernah terlupakan</p>
-      <button class="btn-primary" style="margin-top: 1rem;" onclick="openCinema()">📽️ Putar Mini Bioskop</button>
+    
+    <!-- Gallery Gatekeeper (Unlock the Box) -->
+    <div id="gallery-gatekeeper" class="gallery-gatekeeper">
+      <div class="glass-card gatekeeper-card">
+        <h2 class="page-title text-center">Kotak Kenangan</h2>
+        <p class="text-center" style="font-style: italic; font-size: 0.9rem; margin-bottom: 2rem;">
+          "Semua kenangan terindahku tersimpan di sini... Maukah kamu membukanya?"
+        </p>
+        
+        <div class="box-container">
+          <div class="vintage-box" id="vintage-box">
+            <div class="box-lid"></div>
+            <div class="box-body">
+              <div class="keyhole"></div>
+            </div>
+          </div>
+          
+          <div class="golden-key-wrap" id="golden-key-wrap">
+            <div class="golden-key" id="golden-key" draggable="false">
+              <svg viewBox="0 0 50 100" class="key-svg">
+                <circle cx="25" cy="20" r="15" fill="none" stroke="#d4af37" stroke-width="4" />
+                <rect x="23" y="35" width="4" height="50" fill="#d4af37" />
+                <rect x="27" y="75" width="8" height="3" fill="#d4af37" />
+                <rect x="27" y="81" width="8" height="3" fill="#d4af37" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <p class="text-center hint-drag blink" style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--pink-soft);">
+          Seret kunci emas ke lubang kotak
+        </p>
+      </div>
     </div>
 
-    <div class="gallery-grid" id="gallery-grid">
-      <!-- Photos loaded via JS -->
-    </div>
+    <!-- Main Gallery Content (Initially Hidden) -->
+    <div id="gallery-main-content" class="hidden">
+      <div class="page-header">
+        <h2 class="page-title">📸 Kenangan Indah Kita</h2>
+        <p class="page-subtitle">2023 – 2026 • Momen yang takkan pernah terlupakan</p>
+        <button class="btn-primary" style="margin-top: 1rem;" onclick="openCinema()">📽️ Putar Mini Bioskop</button>
+      </div>
 
-    <div class="nav-buttons bottom-nav">
-      <button class="btn-secondary" onclick="goToSurprise()">← Kembali</button>
-      <button class="btn-secondary" onclick="goToFuture()">Masa Depan 🔮</button>
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Photos loaded via JS -->
+      </div>
+
+      <div class="nav-buttons bottom-nav">
+        <button class="btn-secondary" onclick="goToSurprise()">← Kembali</button>
+        <button class="btn-secondary" onclick="goToFuture()">Masa Depan 🔮</button>
+      </div>
     </div>
 
     <div class="floating-hearts-container" id="floating-hearts-3"></div>
