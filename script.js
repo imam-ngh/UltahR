@@ -9,11 +9,11 @@
 const BIRTHDAY = new Date('2026-04-27T00:00:00');
 
 const GALLERY_ITEMS = [
-  { file: 'img/1.JPG',  caption: 'Awal dari segalanya, senyum yang mengubah duniaku ✨' },
-  { file: 'img/2.jpg',  caption: 'Matahari di hari-hariku yang mendung ☀️' },
-  { file: 'img/3.jpg',  caption: 'Tawamu adalah melodi favoritku 🎶' },
-  { file: 'img/4.jpg',  caption: 'Tempatku menemukan ketenangan 🏡' },
-  { file: 'img/5.jpg',  caption: 'Momen kecil yang terasa luar biasa bersamamu 💎' },
+  { file: 'img/1.JPG', caption: 'Awal dari segalanya, senyum yang mengubah duniaku ✨' },
+  { file: 'img/2.jpg', caption: 'Matahari di hari-hariku yang mendung ☀️' },
+  { file: 'img/3.jpg', caption: 'Tawamu adalah melodi favoritku 🎶' },
+  { file: 'img/4.jpg', caption: 'Tempatku menemukan ketenangan 🏡' },
+  { file: 'img/5.jpg', caption: 'Momen kecil yang terasa luar biasa bersamamu 💎' },
   { file: 'img/6.jpeg', caption: 'Kamu, dan selamanya kamu ❤️' },
   { file: 'img/7.jpeg', caption: 'Setiap detik bersamamu adalah hadiah terindah 🎁' },
   { file: 'img/8.jpeg', caption: 'Kebahagiaanku adalah melihatmu bahagia 😊' },
@@ -76,7 +76,7 @@ Imam 💕`;
 
 
 const EASTER_TITLE = 'Rahasia Kecil 🤫';
-const EASTER_BODY  = `Tahu tidak? Setiap kali kamu tersenyum, semua hal buruk di dunia ini seolah-olah menghilang sejenak. Kamu punya kekuatan itu — kekuatan untuk membuat dunia terasa lebih indah hanya dengan hadir. Jangan pernah underestimate dirimu sendiri, ya. Aku sangat bangga dengan kamu. 💫`;
+const EASTER_BODY = `Tahu tidak? Setiap kali kamu tersenyum, semua hal buruk di dunia ini seolah-olah menghilang sejenak. Kamu punya kekuatan itu — kekuatan untuk membuat dunia terasa lebih indah hanya dengan hadir. Jangan pernah underestimate dirimu sendiri, ya. Aku sangat bangga dengan kamu. 💫`;
 
 const REASONS = [
   "Karena kamu selalu tahu cara membuatku tersenyum bahkan di hari yang paling berat.",
@@ -92,22 +92,22 @@ const REASONS = [
 ];
 
 // ── State ────────────────────────────────────────
-let musicPlaying   = false;
+let musicPlaying = false;
 let confettiActive = false;
-let petalsActive   = true;
+let petalsActive = true;
 let easterClickCount = 0;
 let envelopeOpened = false;
 let currentReasonIndex = 0;
 
 // ── DOM Refs ─────────────────────────────────────
 const pages = {
-  opening:  document.getElementById('page-opening'),
+  opening: document.getElementById('page-opening'),
   surprise: document.getElementById('page-surprise'),
-  gallery:  document.getElementById('page-gallery'),
-  future:   document.getElementById('page-future'),
+  gallery: document.getElementById('page-gallery'),
+  future: document.getElementById('page-future'),
 };
-const overlay   = document.getElementById('transition-overlay');
-const audioEl   = document.getElementById('bg-music');
+const overlay = document.getElementById('transition-overlay');
+const audioEl = document.getElementById('bg-music');
 const audioCtrl = document.getElementById('audio-control');
 const audioIcon = document.getElementById('audio-icon');
 
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Fill text ────────────────────────────────────
 function fillTextContent() {
   document.getElementById('easter-title').textContent = EASTER_TITLE;
-  document.getElementById('easter-body').textContent  = EASTER_BODY;
+  document.getElementById('easter-body').textContent = EASTER_BODY;
 }
 
 // ── Countdown ────────────────────────────────────
@@ -139,7 +139,7 @@ function initCountdown() {
 }
 
 function updateCountdown() {
-  const now  = new Date();
+  const now = new Date();
   const diff = BIRTHDAY - now;
 
   if (diff <= 0) {
@@ -153,10 +153,10 @@ function updateCountdown() {
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
 
-  document.getElementById('days').textContent    = String(d).padStart(2,'0');
-  document.getElementById('hours').textContent   = String(h).padStart(2,'0');
-  document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-  document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+  document.getElementById('days').textContent = String(d).padStart(2, '0');
+  document.getElementById('hours').textContent = String(h).padStart(2, '0');
+  document.getElementById('minutes').textContent = String(m).padStart(2, '0');
+  document.getElementById('seconds').textContent = String(s).padStart(2, '0');
 }
 
 // ── Navigation ───────────────────────────────────
@@ -244,8 +244,8 @@ function typeWriter(el, text, speed) {
 // ── Confetti ─────────────────────────────────────
 function startConfetti() {
   const canvas = document.getElementById('confetti-canvas');
-  const ctx    = canvas.getContext('2d');
-  canvas.width  = window.innerWidth;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
   const particles = Array.from({ length: 140 }, () => ({
@@ -253,7 +253,7 @@ function startConfetti() {
     y: Math.random() * canvas.height - canvas.height,
     r: Math.random() * 8 + 4,
     d: Math.random() * 80 + 20,
-    color: ['#F9DAE6','#FAD0E6','#C1E3F1','#9bc5d8','#ffffff'][Math.floor(Math.random()*5)],
+    color: ['#F9DAE6', '#FAD0E6', '#C1E3F1', '#9bc5d8', '#ffffff'][Math.floor(Math.random() * 5)],
     tilt: Math.random() * 10 - 10,
     tiltAngle: 0,
     tiltAngleInc: (Math.random() * .07) + .05,
@@ -275,7 +275,7 @@ function startConfetti() {
     });
     update();
     if (frame < 260) requestAnimationFrame(draw);
-    else { ctx.clearRect(0,0,canvas.width,canvas.height); confettiActive = false; }
+    else { ctx.clearRect(0, 0, canvas.width, canvas.height); confettiActive = false; }
     frame++;
   }
 
@@ -294,8 +294,8 @@ function startConfetti() {
 // ── Particle Background (Page 1) ─────────────────
 function initParticles() {
   const canvas = document.getElementById('particle-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W = canvas.width  = window.innerWidth;
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
 
   const NUM = 80;
@@ -306,11 +306,11 @@ function initParticles() {
     dx: (Math.random() - .5) * .4,
     dy: (Math.random() - .5) * .4,
     alpha: Math.random() * .6 + .2,
-    color: ['#ff6eb4','#c77dff','#90e0ef'][Math.floor(Math.random()*3)],
+    color: ['#ff6eb4', '#c77dff', '#90e0ef'][Math.floor(Math.random() * 3)],
   }));
 
   window.addEventListener('resize', () => {
-    W = canvas.width  = window.innerWidth;
+    W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
   });
 
@@ -337,7 +337,7 @@ function initStarCanvas() {
   const canvas = document.getElementById('star-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let W = canvas.width  = window.innerWidth;
+  let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
 
   const stars = Array.from({ length: 120 }, () => ({
@@ -369,15 +369,15 @@ function initFloatingHearts(containerId, count) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = '';
-  const emojis = ['❤️','💕','💗','💖','💝','🌸','✨','💫'];
+  const emojis = ['❤️', '💕', '💗', '💖', '💝', '🌸', '✨', '💫'];
   for (let i = 0; i < count; i++) {
     const h = document.createElement('span');
     h.className = 'heart';
     h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    h.style.left     = Math.random() * 100 + 'vw';
+    h.style.left = Math.random() * 100 + 'vw';
     h.style.fontSize = (Math.random() * 1.2 + .7) + 'rem';
-    h.style.animationDuration  = (Math.random() * 8 + 7) + 's';
-    h.style.animationDelay     = (Math.random() * 6) + 's';
+    h.style.animationDuration = (Math.random() * 8 + 7) + 's';
+    h.style.animationDelay = (Math.random() * 6) + 's';
     container.appendChild(h);
   }
 }
@@ -400,7 +400,7 @@ function buildGallery() {
     img.loading = 'lazy';
 
     // Test if image exists
-    img.onload  = () => { loaded++; };
+    img.onload = () => { loaded++; };
     img.onerror = () => {
       wrapper.style.display = 'none';
       loaded++;
@@ -466,7 +466,7 @@ function hideEasterEgg(e) {
 // ── Hidden Message (konami-style: 5× hint click) ─
 function initHiddenMessage() {
   const hint = document.getElementById('easter-hint');
-  const msg  = document.getElementById('hidden-message');
+  const msg = document.getElementById('hidden-message');
   if (!hint) return;
   hint.addEventListener('click', () => {
     easterClickCount++;
@@ -492,7 +492,7 @@ function setupAutoplay() {
         musicPlaying = true;
         audioIcon.textContent = '🎶';
         audioCtrl.classList.add('playing');
-      }).catch(() => {});
+      }).catch(() => { });
     }
   };
   document.addEventListener('click', tryPlay, { once: true });
@@ -520,8 +520,8 @@ function toggleMusic() {
 // ── Click Sound (Web Audio API) ───────────────────
 function playClickSound() {
   try {
-    const ctx  = new (window.AudioContext || window.webkitAudioContext)();
-    const osc  = ctx.createOscillator();
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
     gain.connect(ctx.destination);
@@ -532,13 +532,13 @@ function playClickSound() {
     gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + .2);
-  } catch (_) {}
+  } catch (_) { }
 }
 
 // ── Parallax ──────────────────────────────────────
 function initParallax() {
   document.addEventListener('mousemove', e => {
-    const xp = (e.clientX / window.innerWidth  - .5) * 12;
+    const xp = (e.clientX / window.innerWidth - .5) * 12;
     const yp = (e.clientY / window.innerHeight - .5) * 12;
     document.querySelectorAll('.parallax-card').forEach((el, i) => {
       const depth = (i % 3 + 1) * 0.35;
@@ -578,7 +578,7 @@ function initPetals() {
     speed: Math.random() * 1.5 + 0.5,
     drift: Math.random() * 2 - 1,
     spin: (Math.random() - 0.5) * 0.05,
-    color: ['#ffb7b2','#f9dae6','#ffc4d9','#ffa6c9','#ffffff'][Math.floor(Math.random()*5)]
+    color: ['#ffb7b2', '#f9dae6', '#ffc4d9', '#ffa6c9', '#ffffff'][Math.floor(Math.random() * 5)]
   }));
 
   window.addEventListener('resize', () => {
@@ -623,7 +623,7 @@ function openEnvelope() {
   envelopeOpened = true;
   document.getElementById('envelope').classList.add('open');
   playClickSound();
-  
+
   // Typewriter effect for letter after paper slides out (1.4s delay)
   setTimeout(() => {
     typeWriter(document.getElementById('wish-text'), WISH_TEXT, 35);
@@ -679,4 +679,75 @@ function updateReasonsCarousel() {
   if (!carousel) return;
   carousel.style.transform = `translateX(-${currentReasonIndex * 100}%)`;
   document.getElementById('reason-counter').textContent = `${currentReasonIndex + 1} / ${REASONS.length}`;
+}
+
+// ── Mini Cinema ──────────────────────────────────
+let cinemaInterval;
+let currentCinemaIndex = 0;
+
+function openCinema() {
+  const modal = document.getElementById('cinema-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  playClickSound();
+  
+  // Start countdown
+  const countdownEl = document.getElementById('cinema-countdown');
+  const projectorEl = document.getElementById('cinema-projector');
+  countdownEl.classList.remove('hidden');
+  projectorEl.classList.add('hidden');
+  
+  let count = 3;
+  countdownEl.textContent = count;
+  
+  const timer = setInterval(() => {
+    count--;
+    if (count > 0) {
+      countdownEl.textContent = count;
+      playClickSound();
+    } else {
+      clearInterval(timer);
+      countdownEl.classList.add('hidden');
+      projectorEl.classList.remove('hidden');
+      startCinemaShow();
+    }
+  }, 1000);
+}
+
+function closeCinema() {
+  const modal = document.getElementById('cinema-modal');
+  if (modal) modal.classList.add('hidden');
+  clearInterval(cinemaInterval);
+}
+
+function startCinemaShow() {
+  const imgEl = document.getElementById('cinema-img');
+  const capEl = document.getElementById('cinema-caption');
+  
+  if (!GALLERY_ITEMS || GALLERY_ITEMS.length === 0) return;
+  
+  currentCinemaIndex = 0;
+  showCinemaSlide();
+  
+  cinemaInterval = setInterval(() => {
+    imgEl.classList.add('fade-out');
+    capEl.classList.add('fade-out');
+    
+    setTimeout(() => {
+      currentCinemaIndex = (currentCinemaIndex + 1) % GALLERY_ITEMS.length;
+      showCinemaSlide();
+      imgEl.classList.remove('fade-out');
+      capEl.classList.remove('fade-out');
+    }, 1000);
+  }, 4000); // 4 seconds per slide
+}
+
+function showCinemaSlide() {
+  const item = GALLERY_ITEMS[currentCinemaIndex];
+  const imgEl = document.getElementById('cinema-img');
+  const capEl = document.getElementById('cinema-caption');
+  if (imgEl && capEl) {
+    imgEl.src = item.file;
+    capEl.textContent = item.caption;
+  }
 }
