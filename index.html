@@ -114,6 +114,7 @@
     <div class="page-header">
       <h2 class="page-title">📸 Kenangan Indah Kita</h2>
       <p class="page-subtitle">2023 – 2026 • Momen yang takkan pernah terlupakan</p>
+      <button class="btn-primary" style="margin-top: 1rem;" onclick="openCinema()">📽️ Putar Mini Bioskop</button>
     </div>
 
     <div class="gallery-grid" id="gallery-grid">
@@ -265,6 +266,22 @@
   <!-- ========== HIDDEN MESSAGE (Secret) ========== -->
   <div id="hidden-message" class="hidden-message hidden">
     <p>Kamu menemukannya! 🌟 Aku mencintaimu lebih dari yang bisa aku ungkapkan dengan kata-kata. — Imam ❤️</p>
+  </div>
+
+  <!-- ========== CINEMA MODAL ========== -->
+  <div id="cinema-modal" class="modal hidden cinema-overlay">
+    <div class="cinema-screen" id="cinema-screen">
+      <div class="film-grain"></div>
+      <div class="vignette"></div>
+      <button class="cinema-close" onclick="closeCinema()">Tutup Bioskop &times;</button>
+      
+      <div class="cinema-countdown" id="cinema-countdown">3</div>
+      
+      <div class="cinema-projector hidden" id="cinema-projector">
+        <img id="cinema-img" class="cinema-img" src="" alt="Kenangan" />
+        <p id="cinema-caption" class="cinema-caption"></p>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
