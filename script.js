@@ -690,24 +690,92 @@ function openEnvelope() {
   setTimeout(writeChar, 1400);
 }
 
-// ── Reasons Modal ────────────────────────────────
+// ── Reasons Game (Bubble Pop) ────────────────────
+let poppedCount = 0;
+
 function buildReasons() {
-  const container = document.getElementById('reasons-carousel');
+  const container = document.getElementById('bubble-container');
   if (!container) return;
+  
+  container.innerHTML = '';
+  poppedCount = 0;
+  updateBubbleCounter();
+
   REASONS.forEach((reason, idx) => {
-    const div = document.createElement('div');
-    div.className = 'reason-card';
-    div.innerHTML = `
-      <div class="reason-number">${idx + 1}</div>
-      <p class="reason-text">${reason}</p>
-    `;
-    container.appendChild(div);
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = idx + 1;
+    
+    // Random position and animation variables
+    const size = Math.random() * 40 + 60; // 60-100px
+    const left = Math.random() * 80 + 5; // 5-85%
+    const top = Math.random() * 70 + 10; // 10-80%
+    const duration = Math.random() * 3 + 4; // 4-7s
+    const delay = Math.random() * 2;
+    
+    // Custom properties for CSS animation
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    bubble.style.left = `${left}%`;
+    bubble.style.top = `${top}%`;
+    bubble.style.setProperty('--dur', `${duration}s`);
+    bubble.style.animationDelay = `${delay}s`;
+    
+    // Floating variances
+    bubble.style.setProperty('--tx', `${Math.random() * 40 - 20}px`);
+    bubble.style.setProperty('--ty', `${Math.random() * 40 - 20}px`);
+    bubble.style.setProperty('--tx2', `${Math.random() * 40 - 20}px`);
+    bubble.style.setProperty('--ty2', `${Math.random() * 40 - 20}px`);
+
+    bubble.onclick = (e) => {
+      e.stopPropagation();
+      popBubble(idx, bubble);
+    };
+    
+    container.appendChild(bubble);
   });
-  updateReasonsCarousel();
+}
+
+function popBubble(idx, el) {
+  if (el.classList.contains('popped')) return;
+  
+  el.classList.add('popped');
+  playClickSound(); // Or a specific pop sound if available
+  
+  poppedCount++;
+  updateBubbleCounter();
+
+  // Show the reason after a short delay (animation sync)
+  setTimeout(() => {
+    showActiveReason(idx);
+  }, 300);
+}
+
+function showActiveReason(idx) {
+  const display = document.getElementById('active-reason-display');
+  const numEl = document.getElementById('popped-reason-number');
+  const textEl = document.getElementById('popped-reason-text');
+  
+  numEl.textContent = `#${idx + 1}`;
+  textEl.textContent = REASONS[idx];
+  display.classList.remove('hidden');
+}
+
+function hideActiveReason() {
+  document.getElementById('active-reason-display').classList.add('hidden');
+  playClickSound();
+}
+
+function updateBubbleCounter() {
+  const counter = document.getElementById('reasons-counter-bubbles');
+  if (counter) {
+    counter.textContent = `Gelembung pecah: ${poppedCount} / ${REASONS.length}`;
+  }
 }
 
 function showReasons() {
   document.getElementById('reasons-modal').classList.remove('hidden');
+  buildReasons();
   playClickSound();
 }
 
@@ -716,29 +784,6 @@ function closeReasons(e) {
   if (!e || e.target === modal || e.currentTarget.classList.contains('modal-close')) {
     modal.classList.add('hidden');
   }
-}
-
-function nextReason() {
-  if (currentReasonIndex < REASONS.length - 1) {
-    currentReasonIndex++;
-    updateReasonsCarousel();
-    playClickSound();
-  }
-}
-
-function prevReason() {
-  if (currentReasonIndex > 0) {
-    currentReasonIndex--;
-    updateReasonsCarousel();
-    playClickSound();
-  }
-}
-
-function updateReasonsCarousel() {
-  const carousel = document.getElementById('reasons-carousel');
-  if (!carousel) return;
-  carousel.style.transform = `translateX(-${currentReasonIndex * 100}%)`;
-  document.getElementById('reason-counter').textContent = `${currentReasonIndex + 1} / ${REASONS.length}`;
 }
 
 // ── Mini Cinema ──────────────────────────────────

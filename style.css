@@ -1741,6 +1741,116 @@ canvas {
   letter-spacing: 1px;
 }
 
+/* -- Reasons Bubble Pop -- */
+.reasons-bubble-modal {
+  width: 95vw;
+  max-width: 600px;
+  height: 85dvh;
+  display: flex;
+  flex-direction: column;
+}
+.reasons-game-area {
+  position: relative;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 1rem 0;
+  border: 1px inset rgba(255, 255, 255, 0.1);
+}
+.bubble-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 105, 180, 0.1) 40%, rgba(135, 206, 235, 0.2) 80%);
+  box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.3), inset 5px 5px 15px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s;
+  animation: float-bubble var(--dur, 6s) ease-in-out infinite alternate;
+  user-select: none;
+}
+.bubble:hover {
+  transform: scale(1.1);
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 20%;
+  height: 15%;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+
+@keyframes float-bubble {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(var(--tx, 20px), var(--ty, -20px)) rotate(5deg); }
+  66% { transform: translate(var(--tx2, -15px), var(--ty2, 15px)) rotate(-5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.bubble.popped {
+  animation: pop-anim 0.3s forwards;
+  pointer-events: none;
+}
+@keyframes pop-anim {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; filter: blur(2px); }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.active-reason-display {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  padding: 1.5rem;
+  animation: fadeIn 0.4s ease;
+}
+.reason-reveal-card {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  max-width: 400px;
+  animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.popped-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--pink);
+  margin-bottom: 0.5rem;
+}
+.popped-text {
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.reasons-footer {
+  text-align: center;
+  font-size: 0.9rem;
+  padding-bottom: 1rem;
+  font-weight: 500;
+  color: var(--pink);
+}
+
 /* =============================================
    RESPONSIVE
    ============================================= */
